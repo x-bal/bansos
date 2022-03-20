@@ -17,6 +17,7 @@ class CreateKehadiransTable extends Migration
             $table->id();
             $table->foreignId('warga_id')->constrained('wargas')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('device_id')->constrained('devices')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('jenis_id')->constrained('jenis')->cascadeOnDelete()->cascadeOnUpdate();
             $table->integer('status');
             $table->string('waktu');
             $table->string('ket');

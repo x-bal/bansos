@@ -10,4 +10,9 @@ class Device extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function kehadiran()
+    {
+        return $this->hasMany(Kehadiran::class);
+    }
 }

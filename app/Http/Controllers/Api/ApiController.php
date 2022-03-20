@@ -313,6 +313,7 @@ class ApiController extends Controller
                                     Kehadiran::create([
                                         'device_id' => $device->id,
                                         'warga_id' => $rfid->id,
+                                        'jenis_id' => $jadwal->jenis_id,
                                         'status' => 1,
                                         'waktu' => Carbon::now('Asia/Jakarta')->format('d/m/Y H:i:s'),
                                         'ket' => $ket

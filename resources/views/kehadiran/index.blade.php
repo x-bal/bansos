@@ -25,10 +25,11 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $hadir->nama }}</td>
-                        <td>{{ $hadir->nama }}</td>
-                        <td>{{ $hadir->nama }}</td>
-                        <td>{{ $hadir->nama }}</td>
+                        <td>{{ $hadir->warga->nik }}</td>
+                        <td>{{ $hadir->warga->nama }}</td>
+                        <td>{{ $hadir->jenis->nama }}</td>
+                        <td>{{ $hadir->waktu }}</td>
+                        <td>{{ $hadir->ket }}</td>
                         <td>
                             <a href="{{ route('kehadiran.edit', $hadir->id) }}" class="btn btn-sm btn-success"><i class="fas fa-edit"></i></a>
                         </td>

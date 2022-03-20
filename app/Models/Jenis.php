@@ -19,4 +19,9 @@ class Jenis extends Model
     {
         return $this->hasMany(Jadwal::class, 'jenis_id');
     }
+
+    public function kehadiran()
+    {
+        return $this->hasMany(Kehadiran::class, 'jenis_id');
+    }
 }

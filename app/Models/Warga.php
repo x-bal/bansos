@@ -14,4 +14,9 @@ class Warga extends Model
     {
         return $this->belongsToMany(Jenis::class);
     }
+
+    public function kehadiran()
+    {
+        return $this->hasMany(Kehadiran::class);
+    }
 }
