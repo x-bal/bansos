@@ -279,13 +279,13 @@ class ApiController extends Controller
                     $jadwal = Jadwal::where('tanggal', Carbon::now('Asia/Jakarta')->format('Y-m-d'))->first();
 
                     if ($jadwal) {
-                        if ($now < $startMasuk) {
-                            $response = [
-                                'status' => 'failed',
-                                'ket' => 'Absensi Diluar Waktu'
-                            ];
-                            echo json_encode($response);
-                        }
+                        // if ($now < $startMasuk) {
+                        //     $response = [
+                        //         'status' => 'failed',
+                        //         'ket' => 'Kehadiran Diluar Waktu'
+                        //     ];
+                        //     echo json_encode($response);
+                        // }
 
                         if ($now >= $startMasuk && $now <= $endKeluar) {
                             $absen = true;
@@ -297,7 +297,7 @@ class ApiController extends Controller
                         if ($now >= $endKeluar) {
                             $response = [
                                 'status' => 'failed',
-                                'ket' => 'Absensi Diluar Waktu'
+                                'ket' => 'Kehadiran Diluar Waktu'
                             ];
                             echo json_encode($response);
                         }
