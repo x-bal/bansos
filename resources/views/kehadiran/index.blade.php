@@ -14,8 +14,8 @@
                         <th>No</th>
                         <th>Nik</th>
                         <th>Nama</th>
-                        <th>Waktu</th>
                         <th>Bantuan</th>
+                        <th>Waktu</th>
                         <th>Keterangan</th>
                         <th>Action</th>
                     </tr>
