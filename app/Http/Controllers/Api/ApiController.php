@@ -287,7 +287,7 @@ class ApiController extends Controller
                         //     echo json_encode($response);
                         // }
 
-                        if ($now >= $startMasuk && $now < $endKeluar) {
+                        if ($now >= $startMasuk) {
                             $absen = true;
                             $ket = "Hadir";
                             $status = 1;
