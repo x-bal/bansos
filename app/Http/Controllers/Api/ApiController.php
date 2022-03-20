@@ -275,19 +275,19 @@ class ApiController extends Controller
                     $endKeluar = Carbon::parse($waktu->end)->format('His');
 
                     $absen = false;
-                    $now = Carbon::now()->format('His');
+                    $now = Carbon::now('Asia/Jakarta')->format('His');
                     $jadwal = Jadwal::where('tanggal', Carbon::now('Asia/Jakarta')->format('Y-m-d'))->first();
 
                     if ($jadwal) {
-                        // if ($now < $startMasuk) {
-                        //     $response = [
-                        //         'status' => 'failed',
-                        //         'ket' => 'Kehadiran Diluar Waktu'
-                        //     ];
-                        //     echo json_encode($response);
-                        // }
+                        if ($now < $startMasuk) {
+                            $response = [
+                                'status' => 'failed',
+                                'ket' => 'Kehadiran Diluar Waktu'
+                            ];
+                            echo json_encode($response);
+                        }
 
-                        if ($now >= $startMasuk) {
+                        if ($now >= $startMasuk && $now <= $endKeluar) {
                             $absen = true;
                             $ket = "Hadir";
                             $status = 1;
