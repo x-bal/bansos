@@ -49,7 +49,8 @@ class DeviceController extends Controller
 
             return response()->json([
                 'message' => 'Mode berhasil diubah',
-                'device' => $device
+                'device' => $device,
+                'mode' => request('mode') == 'SCAN' ? 'Scan' : 'Add'
             ]);
         } catch (\Throwable $th) {
             return response()->json([

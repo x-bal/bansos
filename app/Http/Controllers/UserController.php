@@ -32,7 +32,7 @@ class UserController extends Controller
             'name' => 'required',
             'password' => 'required',
             'role' => 'required',
-            'photo.*' => 'required|mimes:png, jpg, jpeg',
+            'photo' => 'required|mimes:png,jpg,jpeg',
         ]);
 
         try {
@@ -66,7 +66,7 @@ class UserController extends Controller
             'username' => 'required|unique:users,username,' . $user->id,
             'name' => 'required',
             'role' => 'required',
-            'photo' => 'mimes:png, jpg, jpeg',
+            'photo' => 'mimes:png,jpg,jpeg',
         ]);
 
         try {

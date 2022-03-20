@@ -279,82 +279,87 @@ class ApiController extends Controller
                     $jadwal = Jadwal::where('tanggal', Carbon::now('Asia/Jakarta')->format('Y-m-d'))->first();
 
                     if ($jadwal) {
-                        if ($now < $startMasuk) {
-                            $response = [
-                                'status' => 'failed',
-                                'ket' => 'Kehadiran Diluar Waktu'
-                            ];
-                            echo json_encode($response);
-                        }
-
-                        if ($now >= $startMasuk && $now <= $endKeluar) {
-                            $absen = true;
-                            $ket = "Hadir";
-                            $status = 1;
-                            $respon = $rfid->nama . " Hadir";
-                        }
-
-                        if ($now >= $endKeluar) {
-                            $response = [
-                                'status' => 'failed',
-                                'ket' => 'Kehadiran Diluar Waktu'
-                            ];
-                            echo json_encode($response);
-                        }
-
-                        if ($absen == true) {
-                            $today = Carbon::now()->format('Y-m-d');
-                            $tomorrow = Carbon::tomorrow()->format('Y-m-d');
-
-                            $kehadiran = Kehadiran::where('warga_id', $rfid->id)->where('created_at', '>=', $today)->where('created_at', '<', $tomorrow)->first();
-
-                            if (!$kehadiran) {
-                                try {
-                                    Kehadiran::create([
-                                        'device_id' => $device->id,
-                                        'warga_id' => $rfid->id,
-                                        'jenis_id' => $jadwal->jenis_id,
-                                        'status' => 1,
-                                        'waktu' => Carbon::now('Asia/Jakarta')->format('d/m/Y H:i:s'),
-                                        'ket' => $ket
-                                    ]);
-
-                                    // History::create([
-                                    //     'device_id' => $device->id,
-                                    //     'rfid' => $rfid->rfid,
-                                    //     'keterangan' => $ket
-                                    // ]);
-
-                                    $response = [
-                                        'status' => 'success',
-                                        'ket' => $respon,
-                                        'nama' => $rfid->nama,
-                                        'waktu' => date('d/m/Y H:i:s'),
-                                        'absensi' => 'Hadir'
-                                    ];
-                                    echo json_encode($response);
-                                } catch (\Throwable $th) {
-                                    $response = [
-                                        'status' => 'failed',
-                                        'ket' => 'Gagal Insert Kehadiran'
-                                    ];
-                                    echo json_encode($response);
-                                }
-                            } else if ($kehadiran && $kehadiran->status == 1) {
+                        if (in_array($jadwal->jenis_id, $rfid->jenis()->pluck('jenis_id')->toArray())) {
+                            if ($now < $startMasuk) {
                                 $response = [
                                     'status' => 'failed',
-                                    'ket' => 'Sudah Hadir'
-                                ];
-                                echo json_encode($response);
-                            } else {
-                                $response = [
-                                    'status' => 'failed',
-                                    'ket' => 'Sudah Hadir'
+                                    'ket' => 'Kehadiran Diluar Waktu'
                                 ];
                                 echo json_encode($response);
                             }
+
+                            if ($now >= $startMasuk && $now <= $endKeluar) {
+                                $absen = true;
+                                $ket = "Hadir";
+                                $status = 1;
+                                $respon = $rfid->nama . " Hadir";
+                            }
+
+                            if ($now >= $endKeluar) {
+                                $response = [
+                                    'status' => 'failed',
+                                    'ket' => 'Kehadiran Diluar Waktu'
+                                ];
+                                echo json_encode($response);
+                            }
+
+                            if ($absen == true) {
+                                $today = Carbon::now()->format('Y-m-d');
+                                $tomorrow = Carbon::tomorrow()->format('Y-m-d');
+
+                                $kehadiran = Kehadiran::where('warga_id', $rfid->id)->where('created_at', '>=', $today)->where('created_at', '<', $tomorrow)->first();
+
+                                if (!$kehadiran) {
+                                    try {
+                                        Kehadiran::create([
+                                            'device_id' => $device->id,
+                                            'warga_id' => $rfid->id,
+                                            'jenis_id' => $jadwal->jenis_id,
+                                            'status' => 1,
+                                            'waktu' => Carbon::now('Asia/Jakarta')->format('d/m/Y H:i:s'),
+                                            'ket' => $ket
+                                        ]);
+
+                                        // History::create([
+                                        //     'device_id' => $device->id,
+                                        //     'rfid' => $rfid->rfid,
+                                        //     'keterangan' => $ket
+                                        // ]);
+
+                                        $response = [
+                                            'status' => 'success',
+                                            'ket' => $respon,
+                                            'nama' => $rfid->nama,
+                                            'waktu' => date('d/m/Y H:i:s'),
+                                            'absensi' => 'Hadir'
+                                        ];
+                                        echo json_encode($response);
+                                    } catch (\Throwable $th) {
+                                        $response = [
+                                            'status' => 'failed',
+                                            'ket' => $th->getMessage()
+                                        ];
+                                        echo json_encode($response);
+                                    }
+                                } else if ($kehadiran && $kehadiran->status == 1) {
+                                    $response = [
+                                        'status' => 'failed',
+                                        'ket' => 'Sudah Hadir'
+                                    ];
+                                    echo json_encode($response);
+                                } else {
+                                    $response = [
+                                        'status' => 'failed',
+                                        'ket' => 'Sudah Hadir'
+                                    ];
+                                    echo json_encode($response);
+                                }
+                            } else {
+                                $notif = array('status' => 'failed', 'ket' => 'Error Waktu Operasional');
+                                echo json_encode($notif);
+                            }
                         } else {
-                            $notif = array('status' => 'failed', 'ket' => 'Error Waktu Operasional');
+                            $notif = array('status' => 'failed', 'ket' => 'Anda Belum Terdaftar');
                             echo json_encode($notif);
                         }
                     } else {

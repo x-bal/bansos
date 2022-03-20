@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Jenis;
 use App\Models\Kehadiran;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -10,12 +11,26 @@ class KehadiranController extends Controller
 {
     public function index()
     {
-        $now = Carbon::now('Asia/Jakarta')->format('Y-m-d 00:00:00');
-        $tomorrow = Carbon::tomorrow('Asia/Jakarta')->format('Y-m-d 00:00:00');
+        $jenis = Jenis::get();
 
-        $kehadiran = Kehadiran::whereBetween('created_at', [$now, $tomorrow])->get();
+        if (request('mulai') && request('sampai') && request('jenis')) {
+            $mulai = Carbon::parse(request('mulai'))->format('Y-m-d 00:00:00');
+            $sampai = Carbon::parse(request('sampai'))->addDay(1)->format('Y-m-d 00:00:00');
 
-        return view('kehadiran.index', compact('kehadiran'));
+            if (request('jenis') == 'semua') {
+                $kehadiran = Kehadiran::whereBetween('created_at', [$mulai, $sampai])->get();
+            } else {
+                $kehadiran = Kehadiran::whereBetween('created_at', [$mulai, $sampai])->where('jenis_id', request('jenis'))->get();
+            }
+        } else {
+            $now = Carbon::now('Asia/Jakarta')->format('Y-m-d 00:00:00');
+            $tomorrow = Carbon::tomorrow('Asia/Jakarta')->format('Y-m-d 00:00:00');
+
+            $kehadiran = Kehadiran::whereBetween('created_at', [$now, $tomorrow])->get();
+        }
+
+
+        return view('kehadiran.index', compact('kehadiran', 'jenis'));
     }
 
     /**

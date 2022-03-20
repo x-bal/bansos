@@ -79,20 +79,22 @@
             let id = $(this).attr('id')
 
             if ($(this).is(':checked')) {
-                let mode = 'SCAN'
+                var mode = 'SCAN'
             } else {
-                let mode = 'ADD'
+                var mode = 'ADD'
             }
+
+            console.log(mode)
 
             $.ajax({
                 url: '/device/' + id,
                 type: 'GET',
                 data: {
-                    mode: 'SCAN'
+                    mode: mode
                 },
                 success: function(response) {
                     $(".label-" + response.device.id).empty()
-                    $(".label-" + response.device.id).append('Scan')
+                    $(".label-" + response.device.id).append(response.mode)
                     Toastify({
                         text: response.message,
                         duration: 3000,

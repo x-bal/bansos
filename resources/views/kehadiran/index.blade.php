@@ -6,6 +6,38 @@
         <h4>Data Kehadiran Warga</h4>
     </div>
     <div class="card-body">
+        <form action="" method="get">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="mulai">Mulai</label>
+                        <input type="date" name="mulai" id="mulai" class="form-control" value="{{ request('mulai') }}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="sampai">Sampai</label>
+                        <input type="date" name="sampai" id="sampai" class="form-control" value="{{ request('sampai') }}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="jenis">Jenis Bantuan</label>
+                        <select name="jenis" id="jenis" class="form-control">
+                            <option value="semua">Semua</option>
+                            @foreach($jenis as $jns)
+                            <option {{ $jns->id == request('jenis') ? 'selected' : '' }} value="{{ $jns->id }}">{{ $jns->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary mt-4">Tampil</button>
+                    </div>
+                </div>
+            </div>
+        </form>
         <div class="table-responsive">
             <table class="table-bordered table-striped table">
                 <thead>
